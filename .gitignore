@@ -107,3 +107,6 @@ jni/testdir/tiny.vim
 jni/testdir/test*.out
 jni/testdir/test.log
 jni/memfile_test
+
+# ncurses extra file in here
+ncurses-5.7-built-for-android.tar
