@@ -1,0 +1,8 @@
+  lua_ok="yes"
+  fail_if_missing="no"
+  vi_cv_path_luajit="/data/local/tmp/xbin/luajit"
+  LUA_LIBS="-L/data/local/tmp/lib -lluajit"
+  LUA_CFLAGS="-I/data/local/tmp/lib/luajit-2.0"
+  LUA_SRC="if_lua.c"
+  LUA_OBJ="objects/if_lua.o"
+  LUA_PRO="if_lua.pro"
