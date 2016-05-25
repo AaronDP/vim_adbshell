@@ -12,11 +12,17 @@ export NM=${CROSS_PATH}-nm
 export CC=${CROSS_PATH}-gcc
 export CXX=${CROSS_PATH}-g++
 export LD=${CROSS_PATH}-ld
+export STRIP=${CROSS_PATH}-strip
 export RANLIB=${CROSS_PATH}-ranlib
-export PREFIX=/data/local/tmp
 export PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig
 #CFLAGS="-UHAVE_LOCALE_H --sysroot=${SYSROOT} -I${SYSROOT}/usr/include -I${ANDROID_PREFIX}/include -I${DEV_PREFIX}/android/bionic \
-export CFLAGS="-static -I${SYSROOT}/usr/include -I${ANDROID_PREFIX}/include -I${DEV_PREFIX}/android/bionic -I/data/local/tmp/lib/include \
+export CFLAGS="-static -I${SYSROOT}/usr/include \
+-I${ANDROID_PREFIX}/include \
+-I${DEV_PREFIX}/android/bionic \
+-I/data/local/tmp/lib/include \
+-I/data/local/tmp/lib/luajit-2.0 \
+-UHAVE_ICONV_H \
+-UHAVE_LANGINFO_H \
 -UHAVE_GETPWENT \
 -UHAVE_GETPWNAM \
 -UHAVE_GETPWUID  \
@@ -27,11 +33,14 @@ export CFLAGS="-static -I${SYSROOT}/usr/include -I${ANDROID_PREFIX}/include -I${
 -UHAVE_GETTEXT \
  "
 export CPPFLAGS="${CFLAGS}"
-export LDFLAGS="${LDFLAGS} -L${SYSROOT}/usr/lib -L${ANDROID_PREFIX}/lib -L/data/local/tmp/lib -L/data/local/tmp/lib/libncurses.a"
+export LDFLAGS="${LDFLAGS} -L${SYSROOT}/usr/lib -L${ANDROID_PREFIX}/lib -L/data/local/tmp/lib -L/data/local/tmp/lib/libncurses.so -L/data/local/tmp/lib/libluajit.so"
 TERMINFO=/data/local/tmp/lib/terminfo
-export BINDIR=/data/local/tmp/xbin
+export PREFIX=
+export BINDIR=/xbin
 export MANDIR=/data/local/tmp/lib/share/man
-export DATADIR=/data/local/tmp/lib/share
+export DATADIR=/data/local/tmp/lib/share.vim
+export DESTDIR=/data/local/tmp
+#  --exec-prefix=/data/local/tmp \
 cd jni && \
   vim_cv_toupper_broken=true \
   vim_cv_terminfo=/data/local/tmp/lib/terminfo \
@@ -44,10 +53,22 @@ cd jni && \
   vim_cv_memcpy_handles_overlap=true \
   ./configure \
   "CFLAGS=${CFLAGS}" "LDFLAGS=${LDFLAGS}" \
+  --with-modified-by="Aaron D. Pierce" \
+  --with-compiledby="Aaron D. Pierce" \
+  --with-local-dir=/data/local/tmp/lib/share.vim \
+  --bindir=/xbin \
+  --disable-gui \
+  --disable-xsmp \
+  --disable-nls \
+  --disable-acl \
+  --with-lua-prefix=/data/local/tmp/lib \
+  --enable-luainterp=dynamic \
+  --with-luajit \
   --with-tlib=ncurses \
   --host=${CROSS_COMPILE} \
   --with-sysroot=${SYSROOT} \
-  --prefix=${PREFIX} "$@" && make && make install
+  --prefix=${PREFIX} "$@" && make 
+make installvimbin installrtbase installmacros installspell
 #./configure --host=arm-unknown-none --with-sysroot=${SYSROOT} --prefix=${PREFIX} "$@"
 #./configure --prefix=${PREFIX} "$@"
 #./configure --host=${CROSS_COMPILE} --prefix=${PREFIX} "$@"
